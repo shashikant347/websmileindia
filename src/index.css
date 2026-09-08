@@ -1019,6 +1019,22 @@ select:focus-visible {
   transform: translateY(-4px);
 }
 
+/* ============================================================
+   INTRO GLOW CARD — Clients page featured box
+   ============================================================ */
+
+.intro-glow-card {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.intro-glow-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(var(--accent-cyan-rgb), 0.4);
+  box-shadow:
+    0 0 40px rgba(var(--accent-cyan-rgb), 0.25),
+    0 0 90px rgba(var(--accent-purple-rgb), 0.15),
+    0 25px 60px var(--glass-shadow);
+}
 
 /* ============================================================
    GLASS DEPTH

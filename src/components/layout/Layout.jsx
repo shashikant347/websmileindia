@@ -6,10 +6,7 @@ import Preloader from './Preloader';
 // Home page's hero and nowhere else) instead of globally here.
 
 const Layout = ({ children }) => {
-  const [theme, setTheme] = useState(() => {
-    const savedTheme = localStorage.getItem('websmile-theme');
-    return savedTheme || 'dark';
-  });
+  const [theme, setTheme] = useState("light");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

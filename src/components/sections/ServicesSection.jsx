@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import {
   Monitor, Code, TrendingUp, Smartphone, Palette, ShoppingCart, Sparkles, LifeBuoy,
-  ArrowUpRight,
+  ArrowUpRight, Check,
 } from 'lucide-react';
 
 const pairs = [
@@ -91,83 +91,134 @@ function ServiceCard({ service }) {
   const Icon = service.icon;
   return (
     <div
-      className="service-card group relative flex w-full flex-col overflow-hidden rounded-[28px] border border-[var(--border)] backdrop-blur-xl transition-all duration-300 ease-out hover:-translate-y-1.5 hover:border-[var(--border-strong)]"
-      style={{ '--accent': service.color, backgroundColor: 'var(--bg-card)' }}
+      className="service-card group relative h-full w-full"
+      style={{ '--accent': service.color }}
     >
-      {/* ── Gradient top accent line ── */}
+      {/* ── Gradient ring — hidden by default, fades in around the
+          card on hover so every card gets its own colored frame
+          instead of a shared grey border. ── */}
       <div
-        className="absolute inset-x-0 top-0 h-[2px] opacity-60 transition-opacity duration-300 group-hover:opacity-100"
-        style={{ background: `linear-gradient(90deg, ${service.color}, ${service.color}55)` }}
+        className="ring-glow pointer-events-none absolute -inset-px rounded-[29px] opacity-0"
+        style={{ background: `linear-gradient(160deg, ${service.color}, ${service.color}00 55%)` }}
       />
 
-      {/* ── Ambient glow on hover ── */}
       <div
-        className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full opacity-0 blur-[72px] transition-opacity duration-500 group-hover:opacity-[0.15]"
-        style={{ background: service.color }}
-      />
-
-      {/* ── Card inner padding wrapper ── */}
-      <div
-        className="relative flex flex-1 flex-col"
-        style={{ padding: '28px' }}
+        className="relative flex h-full flex-col overflow-hidden rounded-[28px] border border-[var(--border)]"
+        style={{ backgroundColor: 'var(--bg-card)' }}
       >
-
-        {/* Icon box */}
+        {/* ── Ambient glow, top corner ── */}
         <div
-          className="mb-6 flex h-[54px] w-[54px] items-center justify-center rounded-2xl transition-transform duration-300 group-hover:scale-110"
-          style={{
-            background: `${service.color}18`,
-            border: `1px solid ${service.color}40`,
-            boxShadow: `0 4px 20px ${service.color}18`,
-          }}
-        >
-          <Icon size={24} style={{ color: service.color }} strokeWidth={1.7} />
-        </div>
+          className="card-glow pointer-events-none absolute -right-16 -top-16 h-52 w-52 rounded-full opacity-0 blur-[70px]"
+          style={{ background: service.color }}
+        />
 
-        {/* Title */}
-        <h3 className="mb-2 text-xl font-bold leading-snug text-[var(--text-primary)] lg:text-[22px]">
-          {service.title}
-        </h3>
+        <div className="relative flex flex-1 flex-col" style={{ padding: '30px' }}>
 
-        {/* Description */}
-        <p className="mb-5 text-[14px] leading-[1.6] text-[var(--text-muted)]">
-          {service.desc}
-        </p>
+          {/* Icon box — layered depth instead of a flat tint */}
+          <div
+            className="icon-box relative mb-7 flex h-[52px] w-[52px] items-center justify-center rounded-[16px]"
+            style={{
+              background: `linear-gradient(160deg, ${service.color}26, ${service.color}0d)`,
+              border: `1px solid ${service.color}3d`,
+              boxShadow: `inset 0 1px 0 ${service.color}30, 0 8px 20px -8px ${service.color}55`,
+            }}
+          >
+            <Icon size={23} style={{ color: service.color }} strokeWidth={1.7} />
+          </div>
 
-        {/* Feature bullets */}
-        <ul className="mb-6 flex flex-col gap-[8px]">
-          {service.points.map((p) => (
-            <li key={p} className="flex items-center gap-3 text-[13.5px] text-[var(--text-muted)]">
+          {/* Title — now carries its own underline, same style as the
+              "Learn More" underline below, but it animates on hover
+              of the WHOLE card (see .service-card:hover .title-underline
+              in the <style> block) rather than only on the link. */}
+          <h3 className="title relative mb-2.5 inline-block w-fit text-[21px] font-bold leading-snug tracking-[-0.01em] text-[var(--text-primary)]">
+            {service.title}
+            <span
+              className="title-underline absolute bottom-[-2px] left-0 h-px w-full"
+              style={{ background: service.color }}
+            />
+          </h3>
+
+          <p className="mb-6 text-[14px] leading-[1.65] text-[var(--text-muted)]">
+            {service.desc}
+          </p>
+
+          <ul className="mb-7 flex flex-col gap-[10px]">
+            {service.points.map((p) => (
+              <li key={p} className="flex items-center gap-3 text-[13.5px] text-[var(--text-muted)]">
+                <span
+                  className="flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full"
+                  style={{ background: `${service.color}1f` }}
+                >
+                  <Check size={11} strokeWidth={3} style={{ color: service.color }} />
+                </span>
+                {p}
+              </li>
+            ))}
+          </ul>
+
+          <div className="flex-1" />
+
+          <div className="mb-5 h-px w-full bg-[var(--border)]" />
+
+          <a
+            href={`/services/${service.slug}`}
+            className="cta group/cta inline-flex w-fit items-center gap-3 text-[14px] font-semibold text-[var(--text-primary)]"
+          >
+            <span className="relative">
+              Learn More
               <span
-                className="h-[7px] w-[7px] shrink-0 rounded-full"
+                className="absolute bottom-[-2px] left-0 h-px w-full origin-left scale-x-0 transition-transform duration-500 ease-out group-hover/cta:scale-x-100"
                 style={{ background: service.color }}
               />
-              {p}
-            </li>
-          ))}
-        </ul>
-
-        {/* Pushes CTA to the bottom */}
-        <div className="flex-1" />
-
-        {/* Divider */}
-        <div className="mb-4 h-px w-full bg-[var(--border)]" />
-
-        {/* CTA */}
-        <a
-          href={`/services/${service.slug}`}
-          className="group/cta inline-flex w-fit items-center gap-2 text-[14px] font-semibold transition-all duration-200"
-          style={{ color: service.color }}
-        >
-          <span className="relative after:absolute after:bottom-[-1px] after:left-0 after:h-px after:w-0 after:bg-current after:transition-all after:duration-300 group-hover/cta:after:w-full">
-            Learn More
-          </span>
-          <ArrowUpRight
-            size={15}
-            className="transition-transform duration-200 group-hover/cta:translate-x-0.5 group-hover/cta:-translate-y-0.5"
-          />
-        </a>
+            </span>
+            <span
+              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border transition-all duration-500 ease-out group-hover/cta:translate-x-0.5 group-hover/cta:-translate-y-0.5"
+              style={{ borderColor: `${service.color}55`, color: service.color }}
+            >
+              <ArrowUpRight size={14} />
+            </span>
+          </a>
+        </div>
       </div>
+
+      <style>{`
+        .service-card {
+          transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .service-card:hover {
+          transform: translateY(-6px);
+        }
+        .service-card .ring-glow,
+        .service-card .card-glow {
+          transition: opacity 0.6s ease;
+        }
+        .service-card:hover .ring-glow {
+          opacity: 1;
+        }
+        .service-card:hover .card-glow {
+          opacity: 0.16;
+        }
+        .service-card .icon-box {
+          transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .service-card:hover .icon-box {
+          transform: scale(1.08) rotate(-3deg);
+        }
+        .service-card .title-underline {
+          transform: scaleX(0);
+          transform-origin: left center;
+          transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .service-card:hover .title-underline {
+          transform: scaleX(1);
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .service-card,
+          .service-card * {
+            transition: none !important;
+          }
+        }
+      `}</style>
     </div>
   );
 }
@@ -227,9 +278,6 @@ const ServicesSection = () => {
       {/* ══════════════════════════════════════════
           Sticky card panels — start at top-[220px]
           so they NEVER cover the heading above.
-          Each panel now has a SOLID background so the
-          panel underneath never bleeds/glows through
-          when the next pair scrolls on top of it.
         ══════════════════════════════════════════ */}
       {pairs.map((pair, i) => (
         <div
@@ -262,9 +310,6 @@ const ServicesSection = () => {
         .stack-panel.is-visible .reveal {
           opacity: 1;
           transform: translateY(0);
-        }
-        .service-card {
-          box-shadow: 0 1px 0 0 rgba(255,255,255,0.04) inset;
         }
         @media (prefers-reduced-motion: reduce) {
           .service-card,
