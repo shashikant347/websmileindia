@@ -128,7 +128,7 @@ const Portfolio = () => {
         excludeSlugs={previewSlugs}
       />
     </>
-  );
+  ); 
 };
 
 export default Portfolio;

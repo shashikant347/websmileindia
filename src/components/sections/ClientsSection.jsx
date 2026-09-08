@@ -30,7 +30,7 @@ const ClientCard = ({ client }) => (
     className="
       relative flex-shrink-0
       w-36 h-24 sm:w-44 sm:h-28
-      rounded-2xl overflow-hidden
+      rounded-2xl overflow-hidden  
       border border-[var(--border)]
       bg-[var(--bg-card-soft)]
       mx-2
