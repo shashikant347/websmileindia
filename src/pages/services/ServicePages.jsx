@@ -73,7 +73,7 @@ export const ServicePage = ({ slug }) => {
                   {service.reasons.map((reason, i) => (
                     <ScrollReveal key={reason} delay={i * 80}>
                       <div className="glass-card p-5 border border-[var(--border)] flex items-start gap-4">
-                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[var(--accent-blue)] to-[var(--accent-cyan)] flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[var(--accent-blue)] to-[var(--accent-cyan)] flex items-center justify-center text-[var(--text-primary)] font-bold text-sm flex-shrink-0">
                           {i + 1}
                         </div>
                         <div>

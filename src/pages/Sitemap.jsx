@@ -25,11 +25,11 @@ const Sitemap = () => (
           ].map(group => (
             <ScrollReveal key={group.title}>
               <div className="glass-card p-6 border border-[var(--border)]">
-                <h3 className="text-white font-bold mb-4 gradient-text-blue-cyan">{group.title}</h3>
+                <h3 className="text-[var(--text-primary)] font-bold mb-4 gradient-text-blue-cyan">{group.title}</h3>
                 <ul className="space-y-2">
                   {group.links.map(link => (
                     <li key={link.label}>
-                      <Link to={link.path} className="text-slate-400 hover:text-cyan-400 text-sm transition-colors flex items-center gap-2">
+                      <Link to={link.path} className="text-[var(--text-muted)] hover:text-cyan-400 text-sm transition-colors flex items-center gap-2">
                         <span className="w-1 h-1 rounded-full bg-slate-600" />
                         {link.label}
                       </Link>

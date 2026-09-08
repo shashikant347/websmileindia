@@ -75,7 +75,7 @@ const Navbar = ({ theme, onToggleTheme }) => {
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3 shrink-0" aria-label="Web Smile India home">
             <div className="logo-badge">
-              <Zap size={19} className="text-white" strokeWidth={2.4} />
+              <Zap size={19} className="text-[var(--text-primary)]" strokeWidth={2.4} />
             </div>
             <span className="text-lg font-black tracking-tight whitespace-nowrap" style={{ color: 'var(--text-primary)' }}>
               Web <span className="gradient-text-blue-cyan">Smile</span>

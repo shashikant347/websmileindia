@@ -186,7 +186,7 @@ const AboutSection = () => {
                       text-xl
                       sm:text-2xl
                       font-black
-                      text-white
+                      text-[var(--text-primary)]
                     "
                   >
                     Your Digital Growth Partner
@@ -197,7 +197,7 @@ const AboutSection = () => {
                       !m-0
                       mt-2
                       text-sm
-                      text-slate-300
+                      text-[var(--text-muted)]
                       max-w-md
                     "
                   >

@@ -3,8 +3,8 @@ import ScrollReveal from '../components/ui/ScrollReveal';
 
 const Section = ({ title, children }) => (
   <div className="mb-8">
-    <h3 className="text-white font-bold text-lg mb-3 gradient-text-blue-cyan">{title}</h3>
-    <div className="text-slate-400 leading-relaxed">{children}</div>
+    <h3 className="text-[var(--text-primary)] font-bold text-lg mb-3 gradient-text-blue-cyan">{title}</h3>
+    <div className="text-[var(--text-muted)] leading-relaxed">{children}</div>
   </div>
 );
 
@@ -15,7 +15,7 @@ const PrivacyPolicy = () => (
       <div className="container-custom max-w-3xl">
         <ScrollReveal>
           <div className="glass-card p-8 border border-[var(--border)]">
-            <p className="text-slate-400 mb-8 text-sm">Last updated: January 2025</p>
+            <p className="text-[var(--text-muted)] mb-8 text-sm">Last updated: January 2025</p>
             <Section title="Information We Collect">
               <p>We collect information you provide directly, such as name, email, phone number, and project details when you contact us or fill out our forms.</p>
             </Section>

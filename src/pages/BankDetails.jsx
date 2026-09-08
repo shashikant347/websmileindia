@@ -11,8 +11,8 @@ const BankDetails = () => (
             <div className="flex items-center gap-3 mb-6">
               <div className="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center text-xl">🏦</div>
               <div>
-                <h3 className="text-white font-bold text-lg">Web Smile India</h3>
-                <p className="text-slate-400 text-sm">Bank Account Details</p>
+                <h3 className="text-[var(--text-primary)] font-bold text-lg">Web Smile India</h3>
+                <p className="text-[var(--text-muted)] text-sm">Bank Account Details</p>
               </div>
             </div>
             <div className="space-y-4">
@@ -25,8 +25,8 @@ const BankDetails = () => (
                 { label: 'Branch', value: 'Sector-63, Noida, U.P.' },
               ].map(({ label, value }) => (
                 <div key={label} className="flex flex-col sm:flex-row sm:items-center justify-between py-3 border-b border-[var(--border)] last:border-0">
-                  <span className="text-slate-400 text-sm">{label}</span>
-                  <span className="text-white font-semibold text-sm mt-1 sm:mt-0">{value}</span>
+                  <span className="text-[var(--text-muted)] text-sm">{label}</span>
+                  <span className="text-[var(--text-primary)] font-semibold text-sm mt-1 sm:mt-0">{value}</span>
                 </div>
               ))}
             </div>

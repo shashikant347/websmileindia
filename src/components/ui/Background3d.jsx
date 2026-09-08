@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { gsap } from 'gsap';
 
@@ -11,35 +11,70 @@ const getCssVar = (name, fallback) => {
   return value || fallback;
 };
 
-const isLightTheme = () =>
-  document.documentElement.getAttribute('data-theme') === 'light';
+const readTheme = () =>
+  document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
 
+// NOTE: This component is meant to be rendered INSIDE a single
+// section (e.g. only the Hero) as an absolutely-positioned background,
+// not globally in Layout. The parent section must have
+// `position: relative` and `overflow: hidden` so the canvas stays
+// clipped to that section and scrolls away with it.
+//
+// It is DARK-MODE ONLY: in light mode this renders nothing at all —
+// no canvas, no dots, no ambient glow — rather than trying to
+// recolor the particles to "work" on a white background.
 const Background3D = () => {
+  const wrapperRef = useRef(null);
   const mountRef = useRef(null);
 
+  // Tracks the current theme so we know whether to mount the
+  // three.js scene at all.
+  const [theme, setTheme] = useState(readTheme);
+
   useEffect(() => {
+    const themeObserver = new MutationObserver(() => setTheme(readTheme()));
+    themeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme'],
+    });
+    return () => themeObserver.disconnect();
+  }, []);
+
+  const isDark = theme === 'dark';
+
+  useEffect(() => {
+    // Light mode: don't build the scene at all.
+    if (!isDark) return;
+
+    const wrapper = wrapperRef.current;
     const currentMount = mountRef.current;
-    if (!currentMount) return;
+    if (!wrapper || !currentMount) return;
 
     const scene = new THREE.Scene();
 
-    const camera = new THREE.PerspectiveCamera(
-      75,
-      window.innerWidth / window.innerHeight,
-      0.1,
-      1000
-    );
+    const getSize = () => ({
+      width: wrapper.clientWidth || window.innerWidth,
+      height: wrapper.clientHeight || window.innerHeight,
+    });
+
+    let { width, height } = getSize();
+
+    const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
     camera.position.z = 5;
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(width, height);
     currentMount.appendChild(renderer.domElement);
 
     const handleResize = () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
+      const size = getSize();
+      camera.aspect = size.width / size.height;
       camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setSize(size.width, size.height);
     };
+
+    const resizeObserver = new ResizeObserver(handleResize);
+    resizeObserver.observe(wrapper);
     window.addEventListener('resize', handleResize);
 
     const geometry = new THREE.BufferGeometry();
@@ -52,35 +87,15 @@ const Background3D = () => {
 
     geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
 
-    // Light mode needs bigger, more opaque dots for the darker teal to
-    // actually read against a white page — dark mode's neon cyan is
-    // visible even at a smaller size/opacity, so we don't want it to
-    // look too "loud" there.
     const material = new THREE.PointsMaterial({
       color: new THREE.Color(getCssVar('--accent-cyan', '#12CFE3')),
-      size: isLightTheme() ? 0.075 : 0.05,
+      size: 0.05,
       transparent: true,
-      opacity: isLightTheme() ? 1 : 0.85,
+      opacity: 0.85,
     });
 
     const points = new THREE.Points(geometry, material);
     scene.add(points);
-
-    // Watch for theme toggles (Layout.jsx sets data-theme on <html>)
-    // and re-read everything whenever it changes — color, size, opacity.
-    const themeObserver = new MutationObserver(() => {
-      material.color.set(getCssVar('--accent-cyan', '#12CFE3'));
-      material.size = isLightTheme() ? 0.075 : 0.05;
-      material.opacity = isLightTheme() ? 1 : 0.85;
-      material.needsUpdate = true;
-
-      // Debug — remove once confirmed working
-      
-    });
-    themeObserver.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-theme'],
-    });
 
     let animationId;
     const animate = () => {
@@ -101,21 +116,25 @@ const Background3D = () => {
 
     return () => {
       window.removeEventListener('resize', handleResize);
+      resizeObserver.disconnect();
       cancelAnimationFrame(animationId);
       zoomTween.kill();
-      themeObserver.disconnect();
       geometry.dispose();
       material.dispose();
       renderer.dispose();
       currentMount.removeChild(renderer.domElement);
     };
-  }, []);
+    // Re-run whenever theme flips: dark->light tears the scene down
+    // (via the cleanup above), light->dark builds a fresh one.
+  }, [isDark]);
+
+  // Light mode: render nothing — no canvas, no glow, nothing.
+  if (!isDark) return null;
 
   return (
-    <div className="fixed top-0 left-0 w-screen h-screen z-0">
-      {/* Ambient glow behind the particles — pure CSS, tied to the
-          theme's own tokens, so it flips automatically with data-theme
-          and never needs JS. */}
+    <div ref={wrapperRef} className="absolute inset-0 z-0 pointer-events-none">
+      {/* Ambient glow behind the particles — dark mode only, since
+          the whole component returns null in light mode above. */}
       <div
         className="
           absolute inset-0 pointer-events-none

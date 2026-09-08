@@ -1,7 +1,7 @@
 /* ============================================================
    WEB SMILE INDIA — GLOBAL DESIGN SYSTEM
    Dark Premium UI + Animated Background
-   Palette: Deep Black + Cyan + Blue + Purple
+   Palette: Rich Navy-Black + Cyan + Blue + Purple
    Typography: Manrope
    ============================================================ */
 
@@ -15,50 +15,53 @@
    ============================================================ */
 
 :root {
-  /* ---------------- Background ---------------- */
+  /* ---------------- Background ----------------
+     Softer charcoal-navy, not pitch black — easier on the eyes
+     and gives cards a gentle lift without harsh contrast jumps. */
 
-  --bg-primary: #050505;
-  --bg-secondary: #0A0A0A;
-  --bg-page: #050505;
+  --bg-primary: #12151F;
+  --bg-secondary: #191D29;
+  --bg-page: #12151F;
 
-  --bg-card: rgba(255, 255, 255, 0.06);
-  --bg-card-soft: rgba(255, 255, 255, 0.04);
-  --bg-surface-soft: rgba(255, 255, 255, 0.05);
+  --bg-card: #1E2230;
+  --bg-card-soft: #1A1E2A;
+
+  --bg-surface-soft: rgba(255, 255, 255, 0.06);
 
   /* ---------------- Navigation ---------------- */
 
   --bg-nav: linear-gradient(
     145deg,
-    rgba(20, 21, 27, 0.96),
-    rgba(8, 9, 12, 0.96)
+    rgba(38, 42, 58, 0.96),
+    rgba(20, 23, 33, 0.96)
   );
 
   --bg-nav-active: linear-gradient(
     145deg,
-    rgba(40, 42, 50, 0.95),
-    rgba(20, 21, 27, 0.95)
+    rgba(56, 61, 82, 0.95),
+    rgba(38, 42, 58, 0.95)
   );
 
-  --bg-nav-inner: rgba(255, 255, 255, 0.04);
+  --bg-nav-inner: rgba(255, 255, 255, 0.05);
 
-  --nav-border: rgba(255, 255, 255, 0.10);
+  --nav-border: rgba(255, 255, 255, 0.12);
 
   --nav-text: #FFFFFF;
-  --nav-muted: #A1A1AA;
+  --nav-muted: #A9B0C2;
 
   /* ---------------- Glass ---------------- */
 
   --glass-1: rgba(255, 255, 255, 0.08);
-  --glass-2: rgba(255, 255, 255, 0.035);
+  --glass-2: rgba(255, 255, 255, 0.04);
 
-  --glass-border: rgba(255, 255, 255, 0.10);
+  --glass-border: rgba(255, 255, 255, 0.12);
 
-  --glass-shadow: rgba(0, 0, 0, 0.55);
+  --glass-shadow: rgba(0, 0, 0, 0.45);
 
-  --glass-hover-bg: rgba(255, 255, 255, 0.10);
+  --glass-hover-bg: rgba(255, 255, 255, 0.11);
 
   --glass-depth-1: rgba(255, 255, 255, 0.08);
-  --glass-depth-2: rgba(255, 255, 255, 0.025);
+  --glass-depth-2: rgba(255, 255, 255, 0.035);
 
   /* ---------------- Accent ---------------- */
 
@@ -73,10 +76,6 @@
   --accent-purple: #A83BFF;
   --accent-pink: #C936E8;
 
-  /* RGB triplets — used inside rgba(...) so glows/badges/hovers can
-     follow the theme instead of being locked to dark-mode's neon
-     values. Every place in this file that used to hardcode
-     rgba(18,207,227,...) etc. now references these instead. */
   --accent-cyan-rgb: 18, 207, 227;
   --accent-blue-rgb: 59, 130, 208;
   --accent-purple-rgb: 168, 59, 255;
@@ -85,25 +84,26 @@
   /* ---------------- Text ---------------- */
 
   --text-primary: #FFFFFF;
-  --text-muted: #A1A1AA;
-  --text-faint: #71717A;
+  --text-muted: #A9B0C2;
+  --text-faint: #7C8398;
 
   /* ---------------- Borders ---------------- */
 
-  --border: rgba(255, 255, 255, 0.10);
-  --border-strong: rgba(255, 255, 255, 0.16);
+  --border: rgba(255, 255, 255, 0.11);
+  --border-strong: rgba(255, 255, 255, 0.19);
 
   /* ---------------- Shadows ---------------- */
 
-  --shadow-strong: rgba(0, 0, 0, 0.45);
+  --shadow-strong: rgba(0, 0, 0, 0.40);
 
-  /* ---------------- Background Glow ---------------- */
+  /* ---------------- Background Glow ----------------
+     Kept moderate — visible but not overpowering. */
 
-  --radial-tint-1: rgba(18, 207, 227, 0.16);
-  --radial-tint-2: rgba(168, 59, 255, 0.15);
-  --radial-tint-3: rgba(59, 130, 208, 0.12);
+  --radial-tint-1: rgba(18, 207, 227, 0.14);
+  --radial-tint-2: rgba(168, 59, 255, 0.13);
+  --radial-tint-3: rgba(59, 130, 208, 0.10);
 
-  --noise-opacity: 0.15;
+  --noise-opacity: 0.10;
 
   /* ---------------- Typography ---------------- */
 
@@ -126,9 +126,9 @@
   /* ---------------- Screenshot Palette ---------------- */
 
   --sp-white: #FFFFFF;
-  --sp-black: #050505;
+  --sp-black: #12151F;
   --sp-text: #FFFFFF;
-  --sp-muted: #A1A1AA;
+  --sp-muted: #A9B0C2;
 
   --sp-cyan: #12CFE3;
   --sp-blue: #3B82D0;
@@ -143,7 +143,6 @@
     var(--sp-pink) 100%
   );
 }
-
 
 /* ============================================================
    LIGHT THEME
@@ -364,17 +363,17 @@ body::before {
   background:
     radial-gradient(
       circle at 20% 30%,
-      rgba(18, 207, 227, 0.22),
+      rgba(18, 207, 227, 0.20),
       transparent 24%
     ),
     radial-gradient(
       circle at 80% 20%,
-      rgba(168, 59, 255, 0.20),
+      rgba(168, 59, 255, 0.18),
       transparent 25%
     ),
     radial-gradient(
       circle at 70% 80%,
-      rgba(59, 130, 208, 0.17),
+      rgba(59, 130, 208, 0.16),
       transparent 28%
     ),
     radial-gradient(
@@ -1118,7 +1117,7 @@ select:focus-visible {
 .btn-primary {
   background: #FFFFFF;
 
-  color: #050505;
+  color: #0B0F1A;
 
   padding: 12px 30px;
 
@@ -1372,8 +1371,8 @@ select:focus-visible {
   background:
     linear-gradient(
       145deg,
-      #1c1d24,
-      #101116
+      #22273A,
+      #141826
     );
 
   border:
@@ -1606,7 +1605,7 @@ select:focus-visible {
       var(--accent-purple)
     );
 
-  color: #050505;
+  color: #0B0F1A;
 
   font-weight: 700;
 

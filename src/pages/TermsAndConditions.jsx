@@ -3,8 +3,8 @@ import ScrollReveal from '../components/ui/ScrollReveal';
 
 const Section = ({ title, children }) => (
   <div className="mb-8">
-    <h3 className="text-white font-bold text-lg mb-3 gradient-text-blue-cyan">{title}</h3>
-    <div className="text-slate-400 leading-relaxed space-y-2">{children}</div>
+    <h3 className="text-[var(--text-primary)] font-bold text-lg mb-3 gradient-text-blue-cyan">{title}</h3>
+    <div className="text-[var(--text-muted)] leading-relaxed space-y-2">{children}</div>
   </div>
 );
 
@@ -15,7 +15,7 @@ const TermsAndConditions = () => (
       <div className="container-custom max-w-3xl">
         <ScrollReveal>
           <div className="glass-card p-8 border border-[var(--border)]">
-            <p className="text-slate-400 mb-8 text-sm">Last updated: January 2025 | Web Smile India, Noida</p>
+            <p className="text-[var(--text-muted)] mb-8 text-sm">Last updated: January 2025 | Web Smile India, Noida</p>
             <Section title="1. Acceptance of Terms">
               <p>By accessing and using the services of Web Smile India, you accept and agree to be bound by the terms and provisions of this agreement.</p>
             </Section>

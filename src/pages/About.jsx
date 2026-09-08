@@ -26,8 +26,8 @@ const About = () => {
                 {/* Main card */}
                 <div className="glass-card p-8 border border-blue-500/20">
                   <div className="text-6xl mb-4">🌐</div>
-                  <h3 className="text-2xl font-black text-white mb-2">Your Digital Growth Partner</h3>
-                  <p className="text-slate-400">Serving businesses across India with cutting-edge IT solutions since {new Date().getFullYear() - company.yearsExperience}.</p>
+                  <h3 className="text-2xl font-black text-[var(--text-primary)] mb-2">Your Digital Growth Partner</h3>
+                  <p className="text-[var(--text-muted)]">Serving businesses across India with cutting-edge IT solutions since {new Date().getFullYear() - company.yearsExperience}.</p>
 
                   <div className="grid grid-cols-3 gap-4 mt-6">
                     {[
@@ -40,14 +40,14 @@ const About = () => {
                         <div className="text-2xl font-black" style={{ color }}>
                           <AnimatedCounter target={value} suffix="+" />
                         </div>
-                        <div className="text-slate-400 text-xs">{label}</div>
+                        <div className="text-[var(--text-muted)] text-xs">{label}</div>
                       </div>
                     ))}
                   </div>
                 </div>
 
                 {/* Floating badge */}
-                <div className="absolute -top-4 -right-4 glass-card px-4 py-2 border border-cyan-400/30 text-sm text-white font-semibold">
+                <div className="absolute -top-4 -right-4 glass-card px-4 py-2 border border-cyan-400/30 text-sm text-[var(--text-primary)] font-semibold">
                   🏆 Trusted Since {new Date().getFullYear() - company.yearsExperience}
                 </div>
               </div>
@@ -57,13 +57,13 @@ const About = () => {
             <ScrollReveal direction="right">
               <div className="space-y-6">
                 <span className="tag-badge">About Web Smile India</span>
-                <h2 className="text-3xl md:text-4xl font-black text-white leading-tight">
+                <h2 className="text-3xl md:text-4xl font-black text-[var(--text-primary)] leading-tight">
                   Leading <span className="gradient-text-blue-cyan">IT Solutions</span> Company in Noida
                 </h2>
-                <p className="text-slate-400 leading-relaxed">
+                <p className="text-[var(--text-muted)] leading-relaxed">
                   Web Smile India is a digital marketing company that offers services like web design, development, mobile app development, digital marketing, software development, graphic designing, and much more.
                 </p>
-                <p className="text-slate-400 leading-relaxed">
+                <p className="text-[var(--text-muted)] leading-relaxed">
                   We are a leading and trusted web designing and development company based in Noida. Serving clients for {company.yearsExperience} years, we provide high-quality IT services at affordable prices with measurable results.
                 </p>
 
@@ -78,7 +78,7 @@ const About = () => {
                   ].map((point) => (
                     <div key={point} className="flex items-start gap-3">
                       <CheckCircle size={16} className="text-cyan-400 flex-shrink-0 mt-0.5" />
-                      <span className="text-slate-300 text-sm">{point}</span>
+                      <span className="text-[var(--text-muted)] text-sm">{point}</span>
                     </div>
                   ))}
                 </div>
@@ -99,15 +99,15 @@ const About = () => {
             <ScrollReveal>
               <div className="glass-card p-8 border border-blue-500/20 h-full">
                 <div className="text-4xl mb-4">🎯</div>
-                <h3 className="text-2xl font-bold text-white mb-4">Our Mission</h3>
-                <p className="text-slate-400 leading-relaxed">{company.mission}</p>
+                <h3 className="text-2xl font-bold text-[var(--text-primary)] mb-4">Our Mission</h3>
+                <p className="text-[var(--text-muted)] leading-relaxed">{company.mission}</p>
               </div>
             </ScrollReveal>
             <ScrollReveal delay={150}>
               <div className="glass-card p-8 border border-cyan-500/20 h-full">
                 <div className="text-4xl mb-4">🚀</div>
-                <h3 className="text-2xl font-bold text-white mb-4">Our Vision</h3>
-                <p className="text-slate-400 leading-relaxed">{company.vision}</p>
+                <h3 className="text-2xl font-bold text-[var(--text-primary)] mb-4">Our Vision</h3>
+                <p className="text-[var(--text-muted)] leading-relaxed">{company.vision}</p>
               </div>
             </ScrollReveal>
           </div>

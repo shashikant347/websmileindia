@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Preloader from './Preloader';
-// import ParticleBackground from '../ui/ParticleBackground';
-import Background3D from '../ui/Background3D';
+// Background3D now renders only inside HeroSection (so it shows on the
+// Home page's hero and nowhere else) instead of globally here.
 
 const Layout = ({ children }) => {
   const [theme, setTheme] = useState(() => {
@@ -26,8 +26,6 @@ const Layout = ({ children }) => {
   return (
     <div className="min-h-screen bg-[var(--bg-page)] relative">
       {loading && <Preloader onFinish={() => setLoading(false)} />}
-      {/* <ParticleBackground /> */}
-      {theme === 'dark' && <Background3D />}
       <div className="relative z-10">
         <Navbar theme={theme} onToggleTheme={() => setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'))} />
         <main>{children}</main>

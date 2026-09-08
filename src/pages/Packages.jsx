@@ -52,8 +52,8 @@ const Packages = () => {
                   key={cat}
                   onClick={() => setActiveCategory(cat)}
                   className={`px-5 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${activeCategory === cat
-                    ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg shadow-blue-500/30'
-                    : 'glass-card text-slate-400 hover:text-white border border-[var(--border)]/10'
+                    ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-[var(--text-primary)] shadow-lg shadow-blue-500/30'
+                    : 'glass-card text-[var(--text-muted)] hover:text-[var(--text-primary)] border border-[var(--border)]/10'
                     }`}
                 >
                   {cat}
@@ -82,14 +82,14 @@ const Packages = () => {
                     </span>
 
                     {/* Name */}
-                    <h3 className="text-white font-bold text-base mb-4 flex-1">{pkg.name}</h3>
+                    <h3 className="text-[var(--text-primary)] font-bold text-base mb-4 flex-1">{pkg.name}</h3>
 
                     {/* Price */}
                     <div className="mt-auto">
                       <div className="text-3xl font-black" style={{ color: color.hex }}>
                         ₹{pkg.price}
                       </div>
-                      <div className="text-slate-500 text-xs mt-1">{pkg.unit === 'Rs.' ? 'One-time / Annual' : `Per ${pkg.unit}`}</div>
+                      <div className="text-[var(--text-faint)] text-xs mt-1">{pkg.unit === 'Rs.' ? 'One-time / Annual' : `Per ${pkg.unit}`}</div>
                     </div>
 
                     {/* Bottom gradient */}
@@ -105,7 +105,7 @@ const Packages = () => {
 
           {/* CTA */}
           <ScrollReveal delay={300} className="text-center mt-12">
-            <p className="text-slate-400 mb-4">Need a custom package tailored to your specific needs?</p>
+            <p className="text-[var(--text-muted)] mb-4">Need a custom package tailored to your specific needs?</p>
             <Link to="/contact" className="btn-primary">
               Get Custom Quote <ArrowRight size={18} />
             </Link>

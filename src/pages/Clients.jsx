@@ -24,23 +24,30 @@ const Clients = () => (
     />
     <section className="section-padding-tight">
       <div className="container-custom">
-        <ScrollReveal>
-          <SectionTitle tag="Clients" title="Businesses That" highlight="Trust Us" />
-        </ScrollReveal>
+       <ScrollReveal>
+  <div className="flex justify-center mb-10">
+    <span className="tag-badge">
+      <span className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-[var(--accent-teal-soft)] to-[var(--accent-marigold-soft)] animate-pulse" />
+      Clients
+    </span>
+  </div>
+</ScrollReveal>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
           {clientNames.map((name, i) => {
             const logoSrc = getLogoSrc(i);
             return (
               <ScrollReveal key={name} delay={i * 30} direction="scale">
-                <div className="relative overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--bg-card-soft)] hover:border-[var(--border-strong)] hover:-translate-y-1 transition-all duration-300 h-32 flex items-center justify-center p-4">
+                <div className="relative overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--bg-card-soft)] hover:border-[var(--border-strong)] hover:-translate-y-1 transition-all duration-300 h-32 flex items-center justify-center">
                   {logoSrc ? (
-                    <img
-                      src={logoSrc}
-                      alt={name}
-                      className="max-w-full max-h-full object-contain"
-                    />
+                    <div className="w-full h-full bg-white flex items-center justify-center">
+                      <img
+                        src={logoSrc}
+                        alt={name}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
                   ) : (
-                    <span className="text-slate-300 font-medium text-xs leading-tight px-2 text-center">
+                    <span className="text-[var(--text-muted)] font-medium text-xs leading-tight px-2 text-center">
                       {name}
                     </span>
                   )}
@@ -50,7 +57,7 @@ const Clients = () => (
           })}
         </div>
         <ScrollReveal className="text-center mt-10">
-          <p className="text-slate-400">And 400+ more satisfied clients across India. <span className="text-cyan-400 font-semibold">Join our growing family!</span></p>
+          <p className="text-[var(--text-muted)]">And 400+ more satisfied clients across India. <span className="text-cyan-400 font-semibold">Join our growing family!</span></p>
         </ScrollReveal>
       </div>
     </section>

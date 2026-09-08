@@ -1,6 +1,6 @@
 const PageHero = ({ title, highlight, subtitle, breadcrumb }) => {
   return (
-    <section className="relative pt-4 pb-4 overflow-hidden">
+    <section className="relative pt-2 pb-2 overflow-hidden">
       {/* Background Glow Effects */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg-secondary)]/15 via-transparent to-transparent" />
@@ -10,14 +10,14 @@ const PageHero = ({ title, highlight, subtitle, breadcrumb }) => {
 
       {/* Decorative top gradient line */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--accent-marigold-soft)]/25 to-transparent" />
-      
+
       {/* Decorative bottom gradient line */}
       <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--accent-teal-soft)]/35 to-transparent" />
 
       <div className="container-custom relative z-10 text-center">
         {/* Breadcrumb Navigation */}
         {breadcrumb && (
-          <div className="mb-3 flex items-center justify-center gap-2 text-xs">
+          <div className="mb-2 flex items-center justify-center gap-2 text-xs">
             <a href="/" className="text-[var(--text-faint)] hover:text-[var(--accent-teal-soft)] transition-colors">Home</a>
             <span className="text-[var(--text-faint)]">/</span>
             <span className="text-[var(--text-muted)] font-medium">{breadcrumb}</span>
@@ -25,10 +25,10 @@ const PageHero = ({ title, highlight, subtitle, breadcrumb }) => {
         )}
 
         {/* Main Heading */}
-        <h1 className="text-2xl md:text-3xl lg:text-4xl font-black text-[var(--text-primary)] mb-2 leading-[1.2] tracking-tight">
+        <h1 className="text-xl md:text-2xl lg:text-3xl font-black text-[var(--text-primary)] mb-1.5 leading-[1.15] tracking-tight">
           {title}{' '}
           {highlight && (
-            <span className="gradient-text block mt-0.5">
+            <span className="gradient-text">
               {highlight}
             </span>
           )}
@@ -36,7 +36,7 @@ const PageHero = ({ title, highlight, subtitle, breadcrumb }) => {
 
         {/* Subtitle */}
         {subtitle && (
-          <p className="text-sm md:text-base text-[var(--text-muted)] max-w-xl mx-auto leading-relaxed font-light">
+          <p className="text-xs md:text-sm text-[var(--text-muted)] max-w-lg mx-auto leading-relaxed font-light">
             {subtitle}
           </p>
         )}

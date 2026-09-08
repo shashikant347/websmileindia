@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Parallax3D } from '../ui/Parallax3D';
+import Background3D from '../ui/Background3D';
 
 
 
@@ -500,7 +501,21 @@ const HeroSection = () => {
   };
 
   return (
-    <section className="relative min-h-screen overflow-hidden flex items-center">
+    // relative + overflow-hidden: this is what clips Background3D to
+    // ONLY this section. Once the user scrolls past the Hero, the
+    // canvas scrolls away with it and is not visible anywhere else.
+    <section className="relative overflow-hidden min-h-screen flex items-center">
+
+      {/* ======================================================
+          3D PARTICLE BACKGROUND — Hero-only.
+          Rendered first so it sits behind everything else in
+          this section (z-0), and clipped by the section's own
+          `overflow-hidden` so it can never bleed into the
+          sections below or onto other pages.
+      ====================================================== */}
+
+      <Background3D />
+
       {/* ======================================================
           BACKGROUND GLOWS
       ====================================================== */}

@@ -157,7 +157,7 @@ const Footer = () => {
         aria-label="Chat on WhatsApp"
         className="fixed bottom-8 right-8 z-50 w-16 h-16 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center shadow-2xl shadow-green-500/50 hover:scale-110 hover:shadow-green-500/70 transition-all duration-300 animate-bounce group"
       >
-        <MessageCircle size={28} className="text-white group-hover:scale-110 transition-transform" />
+        <MessageCircle size={28} className="text-[var(--text-primary)] group-hover:scale-110 transition-transform" />
       </a>
     </footer>
   );
