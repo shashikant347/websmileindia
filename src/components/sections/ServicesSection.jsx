@@ -11,7 +11,8 @@ const pairs = [
       slug: 'website-design',
       title: 'Website Design',
       desc: 'We design websites that build your brand in the market and reward high results.',
-      points: ['Everlasting First Impression', 'Attract More Leads', 'Build Trust Among Customers'],
+      tags: ['Landing Pages', 'Corporate Sites', 'Portfolio Sites'],
+      points: ['Everlasting First Impression', 'Attract More Leads', 'Build Trust Among Customers', 'SEO-Ready Structure'],
       icon: Monitor,
       color: '#3B82F6',
     },
@@ -20,7 +21,8 @@ const pairs = [
       slug: 'web-development',
       title: 'Web Development',
       desc: 'Excellent web solutions that give shape to your expectations. 100% original content.',
-      points: ['Customized Modern Design', 'Mobile Friendly', 'Custom Development'],
+      tags: ['React & Node', 'API Integrations', 'Performance Tuning'],
+      points: ['Customized Modern Design', 'Mobile Friendly', 'Custom Development', 'Scalable Architecture'],
       icon: Code,
       color: '#8B5CF6',
     },
@@ -31,7 +33,8 @@ const pairs = [
       slug: 'digital-marketing',
       title: 'Digital Marketing',
       desc: 'SEO, SEM, and marketing strategies are our expertise, which makes us the perfect solution.',
-      points: ['More Traffic', 'Result-Oriented Campaigns', 'Ranking Reports'],
+      tags: ['SEO', 'PPC Campaigns', 'Social Ads'],
+      points: ['More Traffic', 'Result-Oriented Campaigns', 'Ranking Reports', 'Monthly Analytics Reports'],
       icon: TrendingUp,
       color: '#06B6D4',
     },
@@ -40,7 +43,8 @@ const pairs = [
       slug: 'app-development',
       title: 'App Development',
       desc: 'We develop custom mobile applications for iOS and Android that solve real business problems.',
-      points: ['iOS & Android Apps', 'Custom App Solutions', 'Business App Development'],
+      tags: ['Native iOS', 'Native Android', 'Cross-Platform'],
+      points: ['iOS & Android Apps', 'Custom App Solutions', 'Business App Development', 'App Store Deployment'],
       icon: Smartphone,
       color: '#F59E0B',
     },
@@ -51,7 +55,8 @@ const pairs = [
       slug: 'ui-ux-design',
       title: 'UI/UX Design',
       desc: 'Interfaces crafted around how real users think, scroll, and decide — not just how they look in a mockup.',
-      points: ['User Research', 'Wireframes & Prototypes', 'Conversion-Focused Layouts'],
+      tags: ['User Research', 'Design Systems', 'Usability Testing'],
+      points: ['User Research', 'Wireframes & Prototypes', 'Conversion-Focused Layouts', 'Accessibility-First Design'],
       icon: Palette,
       color: '#EC4899',
     },
@@ -60,7 +65,8 @@ const pairs = [
       slug: 'ecommerce',
       title: 'E-Commerce Development',
       desc: 'Online stores built to convert visitors into buyers, with checkout flows people actually finish.',
-      points: ['Custom Storefronts', 'Secure Payments', 'Inventory Integrations'],
+      tags: ['Shopify', 'WooCommerce', 'Custom Carts'],
+      points: ['Custom Storefronts', 'Secure Payments', 'Inventory Integrations', 'Abandoned Cart Recovery'],
       icon: ShoppingCart,
       color: '#10B981',
     },
@@ -71,7 +77,8 @@ const pairs = [
       slug: 'branding',
       title: 'Branding & Identity',
       desc: 'A visual identity that holds up everywhere your brand shows up — big or small.',
-      points: ['Logo & Identity Systems', 'Brand Guidelines', 'Marketing Collateral'],
+      tags: ['Logo Design', 'Style Guides', 'Print Collateral'],
+      points: ['Logo & Identity Systems', 'Brand Guidelines', 'Marketing Collateral', 'Social Media Kits'],
       icon: Sparkles,
       color: '#F97316',
     },
@@ -80,7 +87,8 @@ const pairs = [
       slug: 'support',
       title: 'IT Support & Maintenance',
       desc: 'A team that keeps answering after launch, so your site and apps stay fast and secure.',
-      points: ['24/7 Monitoring', 'Regular Updates', 'Priority Response'],
+      tags: ['Uptime Monitoring', 'Security Patching', 'Backup Management'],
+      points: ['24/7 Monitoring', 'Regular Updates', 'Priority Response', 'Dedicated Account Manager'],
       icon: LifeBuoy,
       color: '#6366F1',
     },
@@ -112,6 +120,15 @@ function ServiceCard({ service }) {
           style={{ background: service.color }}
         />
 
+        {/* ── Watermark icon — always-on, fills the empty right side
+            with the service's own icon instead of leaving it blank ── */}
+        <Icon
+          size={168}
+          strokeWidth={1}
+          className="watermark-icon pointer-events-none absolute -right-8 -top-6 opacity-[0.07]"
+          style={{ color: service.color }}
+        />
+
         <div className="relative flex flex-1 flex-col" style={{ padding: '30px' }}>
 
           {/* Icon box — layered depth instead of a flat tint */}
@@ -138,11 +155,28 @@ function ServiceCard({ service }) {
             />
           </h3>
 
-          <p className="mb-6 text-[14px] leading-[1.65] text-[var(--text-muted)]">
+          <p className="mb-4 text-[14px] leading-[1.65] text-[var(--text-muted)]">
             {service.desc}
           </p>
 
-          <ul className="mb-7 flex flex-col gap-[10px]">
+          {/* Focus-area tags — concrete scope of the service, not filler */}
+          <div className="mb-6 flex flex-wrap gap-2">
+            {service.tags.map((tag) => (
+              <span
+                key={tag}
+                className="rounded-full px-3 py-1 text-[11.5px] font-semibold"
+                style={{
+                  background: `${service.color}14`,
+                  border: `1px solid ${service.color}30`,
+                  color: service.color,
+                }}
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+
+          <ul className="mb-7 grid grid-cols-1 gap-[10px] sm:grid-cols-2">
             {service.points.map((p) => (
               <li key={p} className="flex items-center gap-3 text-[13.5px] text-[var(--text-muted)]">
                 <span
@@ -197,6 +231,13 @@ function ServiceCard({ service }) {
         }
         .service-card:hover .card-glow {
           opacity: 0.16;
+        }
+        .service-card .watermark-icon {
+          transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .service-card:hover .watermark-icon {
+          opacity: 0.12;
+          transform: scale(1.05);
         }
         .service-card .icon-box {
           transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);

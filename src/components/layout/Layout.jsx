@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Preloader from './Preloader';
+import ParticlePreloader from './ParticlePreloader';
 // Background3D now renders only inside HeroSection (so it shows on the
 // Home page's hero and nowhere else) instead of globally here.
 
@@ -22,8 +23,7 @@ const Layout = ({ children }) => {
 
   return (
     <div className="min-h-screen bg-[var(--bg-page)] relative">
-      {loading && <Preloader onFinish={() => setLoading(false)} />}
-      <div className="relative z-10">
+{loading && <ParticlePreloader onFinish={() => setLoading(false)} />}      <div className="relative z-10">
         <Navbar theme={theme} onToggleTheme={() => setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'))} />
         <main>{children}</main>
         <Footer />

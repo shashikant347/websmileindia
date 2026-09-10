@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { Menu, X, ChevronDown, Sun, Moon, Zap } from 'lucide-react';
+import { Menu, X, ChevronDown, Sun, Moon } from 'lucide-react';
 import { navLinks } from '../../data/siteData';
 
 const Navbar = ({ theme, onToggleTheme }) => {
@@ -74,8 +74,11 @@ const Navbar = ({ theme, onToggleTheme }) => {
         <nav className="flex items-center justify-between h-20">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3 shrink-0" aria-label="Web Smile India home">
-            <div className="logo-badge">
-              <Zap size={19} className="text-[var(--text-primary)]" strokeWidth={2.4} />
+            <div
+              className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+              style={{ background: 'linear-gradient(145deg, var(--accent-teal), var(--accent-purple))' }}
+            >
+              <img src="/logo.png" alt="Web Smile India" className="w-8 h-8 object-contain" />
             </div>
             <span className="text-lg font-black tracking-tight whitespace-nowrap" style={{ color: 'var(--text-primary)' }}>
               Web <span className="gradient-text-blue-cyan">Smile</span>

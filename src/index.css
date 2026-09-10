@@ -1616,9 +1616,9 @@ select:focus-visible {
   background:
     linear-gradient(
       90deg,
-      var(--accent-cyan),
-      var(--accent-blue),
-      var(--accent-purple)
+      color-mix(in srgb, var(--accent-cyan) 65%, #9AA3B2 35%),
+      color-mix(in srgb, var(--accent-blue) 65%, #9AA3B2 35%),
+      color-mix(in srgb, var(--accent-purple) 65%, #9AA3B2 35%)
     );
 
   color: #0B0F1A;
@@ -1634,7 +1634,7 @@ select:focus-visible {
   transition: all 0.25s ease;
 
   box-shadow:
-    0 10px 28px rgba(var(--accent-cyan-rgb), 0.30);
+    0 8px 22px rgba(var(--accent-cyan-rgb), 0.18);
 
   display: inline-flex;
 
