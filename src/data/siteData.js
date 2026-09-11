@@ -546,6 +546,7 @@ export const navLinks = [
   },
   { label: "Industries", path: "/industries" },
   { label: "Portfolio", path: "/portfolio" },
+  { label: "Case Studies", path: "/case-studies" },
   { label: "Clients", path: "/clients" },
   { label: "Contact", path: "/contact" },
 ];
@@ -557,6 +558,7 @@ export const footerLinks = {
     { label: "Packages", path: "/packages" },
     { label: "Join Us", path: "/contact" },
     { label: "Our Portfolio", path: "/portfolio" },
+    { label: "Case Studies", path: "/case-studies" },
     { label: "Industries", path: "/industries" },
     { label: "Contact Us", path: "/contact" },
   ],

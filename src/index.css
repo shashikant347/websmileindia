@@ -9,6 +9,8 @@
 
 @import "tailwindcss";
 
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
 
 /* ============================================================
    ROOT VARIABLES
@@ -1245,10 +1247,9 @@ select:focus-visible {
 /* ============================================================
    LAYOUT
    ============================================================ */
-
 .section-padding {
   padding:
-    clamp(3.5rem, 7vw, 7rem)
+    clamp(1.5rem, 3vw, 3rem)
     0;
 }
 

@@ -20,7 +20,9 @@ import TermsAndConditions from './pages/TermsAndConditions';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import Disclaimer from './pages/Disclaimer';
 import Sitemap from './pages/Sitemap';
+import CaseStudies from './pages/CaseStudies';
 import NotFound from './pages/NotFound';
+import CaseStudyDetail from './pages/CaseStudyDetail';
 import './App.css'
 
 // Service Pages
@@ -50,9 +52,11 @@ function App() {
           <Route path="/industries" element={<Industries />} />
           <Route path="/portfolio" element={<Portfolio />} />
           <Route path="/clients" element={<Clients />} />
+          <Route path="/case-studies" element={<CaseStudies />} />
           <Route path="/testimonials" element={<Testimonials />} />
           <Route path="/packages" element={<Packages />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/case-studies/:slug" element={<CaseStudyDetail />} />
 
           {/* Service Pages */}
           <Route path="/services/website-design" element={<WebDesign />} />

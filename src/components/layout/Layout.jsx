@@ -7,11 +7,14 @@ import ParticlePreloader from './ParticlePreloader';
 // Home page's hero and nowhere else) instead of globally here.
 
 const Layout = ({ children }) => {
-  const [theme, setTheme] = useState("light");
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem('websmile-theme') || 'light';
+  });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
+    document.documentElement.classList.toggle('dark', theme === 'dark');
     localStorage.setItem('websmile-theme', theme);
   }, [theme]);
 
