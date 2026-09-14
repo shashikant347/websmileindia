@@ -86,7 +86,7 @@ const Navbar = ({ theme, onToggleTheme }) => {
           </Link>
 
           {/* Desktop Nav */}
-          <div className="hidden lg:flex items-center gap-9">
+          <div className="hidden lg:flex items-center gap-6">
             {navLinks.map((link) => {
               const isDropdownOpen = activeDropdown === link.label;
               const isLinkActive = link.path ? isPathActive(link.path) : false;

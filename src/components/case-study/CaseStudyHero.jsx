@@ -1,6 +1,7 @@
 // src/components/case-study/CaseStudyHero.jsx
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import {
     Search,
     MousePointerClick,
@@ -13,10 +14,11 @@ import {
     Sparkles,
     Check,
     CheckCircle2,
-    ShieldCheck,
     Lock,
 } from 'lucide-react';
 import { heroShot } from '../../utils/websiteScreenshot';
+import { parseKpiValue } from '../../utils/parseCounterValue';
+import AnimatedCounter from '../ui/AnimatedCounter';
 
 // Import high-res portfolio screenshots from local repository
 const imageModules = import.meta.glob('../../assets/portfolio/*.{png,jpg,jpeg,webp}', {
@@ -54,91 +56,84 @@ const CATEGORY_META = {
     },
 };
 
+// One shared stagger: children animate in sequence off a single timeline
+// instead of each element having its own independent entrance effect.
+const stagger = {
+    hidden: {},
+    show: { transition: { staggerChildren: 0.09, delayChildren: 0.05 } },
+};
+const fadeUp = {
+    hidden: { opacity: 0, y: 18 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.16, 1, 0.3, 1] } },
+};
+
 export default function CaseStudyHero({ study }) {
     const [copied, setCopied] = useState(false);
     const primaryCategory = study.categories?.[0] || 'seo';
     const meta = CATEGORY_META[primaryCategory] || CATEGORY_META.seo;
     const CategoryIcon = meta.icon;
 
-    // Prefer high-quality local repository image, then study.images, then fallback to screenshot
     const localHero = imagesBySlug[study.id];
     const bgImage = localHero || study.images?.[0] || (study.website ? heroShot(study.website, 1600, 900) : null);
 
     const handleShare = async () => {
         try {
             await navigator.clipboard.writeText(window.location.href);
-            setCopied(true);
-            setTimeout(() => setCopied(false), 2500);
         } catch {
-            setCopied(true);
-            setTimeout(() => setCopied(false), 2500);
+            /* clipboard unavailable, still show confirmation */
         }
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2500);
     };
 
-    // Calculate top highlights for the hero KPI ribbon
     const kpiItems = [];
     if (study.seoStats) {
-        kpiItems.push({
-            value: `#${study.seoStats.rankedFirst}`,
-            label: 'Keywords Ranked #1',
-            accent: 'text-[var(--accent-cyan)]',
-        });
-        kpiItems.push({
-            value: `${study.seoStats.page1Percent}%`,
-            label: 'Page 1 Rankings',
-            accent: 'text-[var(--accent-blue)]',
-        });
-        kpiItems.push({
-            value: `${study.seoStats.keywordsTracked}`,
-            label: 'Keywords Tracked',
-            accent: 'text-[var(--accent-purple)]',
-        });
+        kpiItems.push(
+            { value: `${study.seoStats.rankedFirst}`, label: 'Keywords Ranked #1', accent: 'text-[var(--accent-cyan)]' },
+            { value: `${study.seoStats.page1Percent}%`, label: 'Page 1 Rankings', accent: 'text-[var(--accent-blue)]' },
+            { value: `${study.seoStats.keywordsTracked}`, label: 'Keywords Tracked', accent: 'text-[var(--accent-purple)]' }
+        );
     }
-
     if (study.adsStats?.length) {
         const latestAds = study.adsStats[study.adsStats.length - 1];
-        if (latestAds.clicks) {
-            kpiItems.push({
-                value: latestAds.clicks,
-                label: 'Clicks Delivered',
-                accent: 'text-[var(--accent-cyan)]',
-            });
-        }
-        if (latestAds.conversions) {
-            kpiItems.push({
-                value: latestAds.conversions,
-                label: 'Conversions Generated',
-                accent: 'text-emerald-500',
-            });
-        }
-        if (latestAds.avgCpc) {
-            kpiItems.push({
-                value: latestAds.avgCpc,
-                label: 'Average CPC',
-                accent: 'text-[var(--accent-blue)]',
-            });
-        }
+        if (latestAds.clicks) kpiItems.push({ value: latestAds.clicks, label: 'Clicks Delivered', accent: 'text-[var(--accent-cyan)]' });
+        if (latestAds.conversions) kpiItems.push({ value: latestAds.conversions, label: 'Conversions Generated', accent: 'text-emerald-500' });
+        if (latestAds.avgCpc) kpiItems.push({ value: latestAds.avgCpc, label: 'Average CPC', accent: 'text-[var(--accent-blue)]' });
     }
-
     if (kpiItems.length === 0) {
         kpiItems.push(
             { value: '100%', label: 'Campaign Delivery', accent: 'text-emerald-500' },
             { value: '3.8x', label: 'Lead Growth Rate', accent: 'text-[var(--accent-cyan)]' },
-            { value: '5★', label: 'Client Satisfaction', accent: 'text-amber-500' }
+            { value: '5', label: 'Client Satisfaction', accent: 'text-amber-500' }
         );
     }
 
     return (
-        <section className="relative w-full overflow-hidden pt-12 sm:pt-16 pb-12 border-b border-[var(--border)] transition-colors duration-300 bg-[var(--bg-page)] text-[var(--text-primary)]">
-            {/* Top decorative gradient hairline */}
-            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--accent-cyan)]/30 to-transparent pointer-events-none" />
+        <section className="relative w-full overflow-hidden pt-6 sm:pt-8 pb-6 border-b border-[var(--border)] transition-colors duration-300 bg-[var(--bg-page)] text-[var(--text-primary)]">
+            {/* Soft vertical wash — richer in light mode so the section doesn't feel flat */}
+            <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-[var(--bg-secondary)]/[0.85] dark:from-[var(--bg-secondary)]/20 via-transparent to-transparent" />
 
-            {/* Bottom decorative gradient hairline */}
-            <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--accent-purple)]/20 to-transparent pointer-events-none" />
+            {/* Subtle vignette for depth in light mode */}
+            <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_50%_30%,transparent_40%,var(--bg-page)/[0.5])] dark:bg-[radial-gradient(ellipse_at_50%_30%,transparent_40%,transparent)]" />
 
-            {/* 1. Subtle, elegant blueprint grid that adapts softly to light and dark themes */}
+            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--accent-cyan)]/[0.55] dark:via-[var(--accent-cyan)]/30 to-transparent pointer-events-none" />
+            <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--accent-purple)]/[0.4] dark:via-[var(--accent-purple)]/20 to-transparent pointer-events-none" />
+
+            {/* Dot-grid mesh: gives light mode some texture to sit on instead of flat white,
+                still subtle enough not to fight with content */}
             <div
-                className="absolute inset-0 pointer-events-none opacity-[0.22] dark:opacity-[0.14]"
+                className="absolute inset-0 pointer-events-none opacity-[0.55] dark:opacity-[0.25]"
+                style={{
+                    backgroundImage: `radial-gradient(var(--border) 1.2px, transparent 1.2px)`,
+                    backgroundSize: '22px 22px',
+                    maskImage: 'radial-gradient(ellipse at 50% 30%, black 25%, transparent 75%)',
+                    WebkitMaskImage: 'radial-gradient(ellipse at 50% 30%, black 25%, transparent 75%)',
+                }}
+            />
+
+            {/* Fine line grid — visible in both modes for consistent depth */}
+            <div
+                className="absolute inset-0 pointer-events-none opacity-[0.07] dark:opacity-[0.14]"
                 style={{
                     backgroundImage: `linear-gradient(to right, var(--border) 1px, transparent 1px), linear-gradient(to bottom, var(--border) 1px, transparent 1px)`,
                     backgroundSize: '40px 40px',
@@ -147,44 +142,43 @@ export default function CaseStudyHero({ study }) {
                 }}
             />
 
-            {/* 2. Ambient, luminous gradient glows matching the brand design system */}
+            {/* Ambient glow blobs: more colorful and present in light mode so the section
+                doesn't read as empty white space, richer and more saturated in dark mode */}
             <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                {/* Cyan ambient orb */}
-                <div className="absolute -top-20 left-1/4 w-[500px] h-[340px] bg-[var(--accent-cyan)]/10 dark:bg-[var(--accent-cyan)]/15 blur-[120px] rounded-full" />
-                {/* Purple / Indigo ambient orb */}
-                <div className="absolute top-4 right-10 w-[450px] h-[320px] bg-[var(--accent-purple)]/8 dark:bg-[var(--accent-purple)]/12 blur-[130px] rounded-full" />
-                {/* Subtle soft center aura */}
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-[400px] h-[200px] bg-[var(--accent-blue)]/6 dark:bg-[var(--accent-blue)]/10 blur-[110px] rounded-full" />
+                <div className="absolute -top-28 left-[8%] w-[600px] h-[420px] bg-[var(--accent-cyan)]/[0.22] dark:bg-[var(--accent-cyan)]/20 blur-[110px] rounded-full" />
+                <div className="absolute -top-16 right-[5%] w-[520px] h-[380px] bg-[var(--accent-purple)]/[0.20] dark:bg-[var(--accent-purple)]/[0.16] blur-[120px] rounded-full" />
+                <div className="absolute bottom-[-60px] left-1/2 -translate-x-1/2 w-[460px] h-[260px] bg-[var(--accent-blue)]/[0.18] dark:bg-[var(--accent-blue)]/[0.14] blur-[110px] rounded-full" />
+                <div className="absolute top-1/3 left-1/3 w-[300px] h-[220px] bg-amber-400/[0.14] dark:bg-amber-400/[0.06] blur-[100px] rounded-full" />
             </div>
 
-            <div className="container-custom max-w-6xl mx-auto relative z-10">
+            {/* Decorative corner accents: small floating dots/rings for extra visual interest,
+                purely cosmetic, slightly more visible in light mode */}
+            <div className="absolute inset-0 pointer-events-none hidden lg:block overflow-hidden">
+                <div className="absolute top-10 right-[12%] w-16 h-16 rounded-full border border-[var(--accent-cyan)]/[0.4] dark:border-[var(--accent-cyan)]/20" />
+                <div className="absolute top-24 right-[18%] w-2.5 h-2.5 rounded-full bg-[var(--accent-purple)]/[0.55] dark:bg-[var(--accent-purple)]/50" />
+                <div className="absolute bottom-16 left-[10%] w-10 h-10 rounded-full border border-[var(--accent-blue)]/[0.4] dark:border-[var(--accent-blue)]/20" />
+                <div className="absolute bottom-28 left-[16%] w-2 h-2 rounded-full bg-[var(--accent-cyan)]/[0.55] dark:bg-[var(--accent-cyan)]/50" />
+            </div>
+
+            <motion.div
+                variants={stagger}
+                initial="hidden"
+                animate="show"
+                className="container-custom max-w-6xl mx-auto relative z-10"
+            >
                 {/* Top Nav: Breadcrumb + Action Bar */}
-                <div className="flex flex-wrap items-center justify-between gap-3 mb-8">
-                    {/* Breadcrumbs with clean glass pill */}
+                <motion.div variants={fadeUp} className="flex flex-wrap items-center justify-between gap-3 mb-4">
                     <nav
                         aria-label="Breadcrumb"
                         className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[var(--bg-card)] border border-[var(--border)] text-xs text-[var(--text-muted)] shadow-xs backdrop-blur-md"
                     >
-                        <Link
-                            to="/"
-                            className="hover:text-[var(--text-primary)] transition-colors font-medium"
-                        >
-                            Home
-                        </Link>
+                        <Link to="/" className="hover:text-[var(--text-primary)] transition-colors font-medium">Home</Link>
                         <span className="text-[var(--text-faint)]">/</span>
-                        <Link
-                            to="/case-studies"
-                            className="hover:text-[var(--text-primary)] transition-colors font-medium"
-                        >
-                            Case Studies
-                        </Link>
+                        <Link to="/case-studies" className="hover:text-[var(--text-primary)] transition-colors font-medium">Case Studies</Link>
                         <span className="text-[var(--text-faint)]">/</span>
-                        <span className="text-[var(--accent-cyan)] font-bold truncate max-w-[170px] sm:max-w-none">
-                            {study.name}
-                        </span>
+                        <span className="text-[var(--accent-cyan)] font-bold truncate max-w-[170px] sm:max-w-none">{study.name}</span>
                     </nav>
 
-                    {/* Actions */}
                     <div className="flex items-center gap-2">
                         <button
                             type="button"
@@ -213,14 +207,12 @@ export default function CaseStudyHero({ study }) {
                             <span>All Studies</span>
                         </Link>
                     </div>
-                </div>
+                </motion.div>
 
                 {/* Hero Main Grid */}
-                <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-                    {/* Left Column: Heading, Badges, Tagline */}
-                    <div className="lg:col-span-7 space-y-4">
-                        {/* Category Badges */}
-                        <div className="flex flex-wrap items-center gap-2">
+                <div className="grid lg:grid-cols-12 gap-6 lg:gap-8 items-center">
+                    <div className="lg:col-span-7 space-y-2.5">
+                        <motion.div variants={fadeUp} className="flex flex-wrap items-center gap-2">
                             {study.categories.map((c) => {
                                 const cMeta = CATEGORY_META[c] || CATEGORY_META.seo;
                                 const Icon = cMeta.icon;
@@ -234,65 +226,60 @@ export default function CaseStudyHero({ study }) {
                                     </span>
                                 );
                             })}
-
                             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 shadow-xs backdrop-blur-md">
                                 <CheckCircle2 size={12} />
                                 Verified Case Study
                             </span>
-                        </div>
+                        </motion.div>
 
-                        {/* Client Title */}
-                        <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-[var(--text-primary)] tracking-tight leading-[1.12]">
+                        <motion.h1
+                            variants={fadeUp}
+                            className="text-2xl sm:text-3xl md:text-4xl font-black text-[var(--text-primary)] tracking-tight leading-[1.1]"
+                        >
                             {study.name}
-                        </h1>
+                        </motion.h1>
 
-                        {/* Industry Tagline */}
-                        <p className="text-base sm:text-lg text-[var(--text-muted)] font-medium leading-relaxed max-w-2xl">
+                        <motion.p variants={fadeUp} className="text-sm sm:text-base text-[var(--text-muted)] font-medium leading-snug max-w-2xl">
                             {study.industry}
-                        </p>
+                        </motion.p>
 
-                        {/* Metadata Pills: Market & Timeline */}
-                        <div className="flex flex-wrap items-center gap-2.5 text-xs text-[var(--text-muted)] pt-1">
+                        <motion.div variants={fadeUp} className="flex flex-wrap items-center gap-2 text-xs text-[var(--text-muted)] pt-1">
                             {study.targetMarket && (
-                                <div className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[var(--bg-card)] border border-[var(--border)] shadow-xs">
+                                <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[var(--bg-card)] border border-[var(--border)] shadow-xs">
                                     <MapPin size={13} className="text-[var(--accent-cyan)] shrink-0" />
                                     <span>Market: <strong className="text-[var(--text-primary)] font-bold">{study.targetMarket}</strong></span>
                                 </div>
                             )}
-
                             {study.timeline && (
-                                <div className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[var(--bg-card)] border border-[var(--border)] shadow-xs">
+                                <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[var(--bg-card)] border border-[var(--border)] shadow-xs">
                                     <Calendar size={13} className="text-[var(--accent-purple)] shrink-0" />
                                     <span>Duration: <strong className="text-[var(--text-primary)] font-bold">{study.timeline}</strong></span>
                                 </div>
                             )}
-                        </div>
+                        </motion.div>
 
-                        {/* Website Link */}
                         {study.website && (
-                            <div className="pt-2">
+                            <motion.div variants={fadeUp} className="pt-1.5">
                                 <a
                                     href={study.website}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[var(--bg-card)] hover:bg-[var(--bg-surface-soft)] border border-[var(--border)] hover:border-[var(--accent-cyan)]/40 text-xs sm:text-sm font-bold text-[var(--text-primary)] hover:text-[var(--accent-cyan)] transition-all shadow-xs hover:shadow-md group"
+                                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[var(--bg-card)] hover:bg-[var(--bg-surface-soft)] border border-[var(--border)] hover:border-[var(--accent-cyan)]/40 text-xs sm:text-sm font-bold text-[var(--text-primary)] hover:text-[var(--accent-cyan)] transition-all shadow-xs hover:shadow-md group"
                                 >
                                     <Globe size={15} className="text-[var(--accent-cyan)]" />
                                     <span>Visit Live Website: {study.website.replace(/^https?:\/\//, '').replace(/\/$/, '')}</span>
                                     <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform text-[var(--accent-cyan)]" />
                                 </a>
-                            </div>
+                            </motion.div>
                         )}
                     </div>
 
                     {/* Right Column: Hero Visual Browser Mockup */}
-                    <div className="lg:col-span-5">
+                    <motion.div variants={fadeUp} className="lg:col-span-5">
                         <div className="relative group">
-                            {/* Ambient backdrop glow */}
                             <div className="absolute -inset-1.5 rounded-3xl bg-gradient-to-r from-[var(--accent-cyan)]/15 via-[var(--accent-purple)]/15 to-[var(--accent-blue)]/15 blur-xl -z-10 opacity-75 group-hover:opacity-100 transition-opacity" />
 
                             <div className="relative rounded-2xl overflow-hidden border border-[var(--border)] shadow-xl bg-[var(--bg-card)] transition-all duration-300">
-                                {/* Browser Chrome Header */}
                                 <div className="flex items-center justify-between px-4 py-2.5 bg-[var(--bg-card-soft)] border-b border-[var(--border)] backdrop-blur-sm">
                                     <div className="flex items-center gap-1.5">
                                         <div className="w-2.5 h-2.5 rounded-full bg-rose-400" />
@@ -306,7 +293,6 @@ export default function CaseStudyHero({ study }) {
                                     <div className="w-4" />
                                 </div>
 
-                                {/* Screenshot Frame */}
                                 <div className="relative aspect-[16/10] overflow-hidden bg-[var(--bg-page)] flex items-center justify-center">
                                     {bgImage ? (
                                         <img
@@ -327,7 +313,6 @@ export default function CaseStudyHero({ study }) {
                                         </div>
                                     )}
 
-                                    {/* Floating Live Indicator Badge */}
                                     <div className="absolute bottom-3 right-3 px-2.5 py-1 rounded-lg bg-[var(--bg-card)]/90 backdrop-blur-md border border-[var(--border)] text-[11px] font-bold text-[var(--text-primary)] shadow-md flex items-center gap-1.5 pointer-events-none">
                                         <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                                         <span>Verified Client</span>
@@ -335,40 +320,45 @@ export default function CaseStudyHero({ study }) {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </motion.div>
                 </div>
 
-                {/* Bottom Dock: Floating Verified KPI Ribbon */}
+                {/* Bottom Dock: Floating Verified KPI Ribbon, numbers count up once on arrival */}
                 {kpiItems.length > 0 && (
-                    <div className="mt-10 rounded-2xl bg-[var(--bg-card)] p-5 md:p-6 border border-[var(--border)] shadow-md backdrop-blur-xl transition-all">
-                        <div className="flex flex-col sm:flex-row items-center justify-between gap-2 pb-3 mb-4 border-b border-[var(--border)]">
+                    <motion.div
+                        variants={fadeUp}
+                        className="mt-5 rounded-2xl bg-[var(--bg-card)] p-4 md:p-5 border border-[var(--border)] shadow-md backdrop-blur-xl transition-all"
+                    >
+                        <div className="flex flex-col sm:flex-row items-center justify-between gap-2 pb-2 mb-3 border-b border-[var(--border)]">
                             <div className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-[var(--text-primary)]">
                                 <Sparkles size={14} className="text-[var(--accent-cyan)]" />
                                 <span>Verified Campaign Impact & Performance Milestones</span>
                             </div>
-                            <span className="text-xs text-[var(--text-muted)] font-medium">
-                                Audited by Web Smile India Performance Lab
-                            </span>
+                            <span className="text-xs text-[var(--text-muted)] font-medium">Audited by Web Smile India Performance Lab</span>
                         </div>
 
-                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5">
-                            {kpiItems.map((kpi, idx) => (
-                                <div
-                                    key={idx}
-                                    className="p-4 rounded-xl bg-[var(--bg-surface-soft)] border border-[var(--border)] text-center hover:border-[var(--accent-cyan)]/40 hover:bg-[var(--bg-card)] transition-all shadow-xs group"
-                                >
-                                    <div className={`text-2xl sm:text-3xl font-black tracking-tight ${kpi.accent}`}>
-                                        {kpi.value}
+                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                            {kpiItems.map((kpi, idx) => {
+                                const { prefix, target, suffix, decimals } = parseKpiValue(kpi.value);
+                                return (
+                                    <div
+                                        key={idx}
+                                        className="p-3.5 rounded-xl bg-[var(--bg-surface-soft)] border border-[var(--border)] text-center hover:border-[var(--accent-cyan)]/40 hover:bg-[var(--bg-card)] transition-all shadow-xs group"
+                                    >
+                                        <div className={`text-2xl sm:text-3xl font-black tracking-tight ${kpi.accent}`}>
+                                            <AnimatedCounter target={target} prefix={prefix} suffix={suffix} decimals={decimals} />
+                                        </div>
+                                        <div className="text-xs text-[var(--text-muted)] mt-1 font-bold leading-tight group-hover:text-[var(--text-primary)] transition-colors">
+                                            {kpi.label}
+                                        </div>
                                     </div>
-                                    <div className="text-xs text-[var(--text-muted)] mt-1.5 font-bold leading-tight group-hover:text-[var(--text-primary)] transition-colors">
-                                        {kpi.label}
-                                    </div>
-                                </div>
-                            ))}
+                                );
+                            })}
                         </div>
-                    </div>
+                    </motion.div>
                 )}
-            </div>
+                
+            </motion.div>
         </section>
     );
 }
