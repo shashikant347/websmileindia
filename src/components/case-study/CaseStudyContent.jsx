@@ -1,8 +1,6 @@
 // src/components/case-study/CaseStudyContent.jsx
 import { motion } from 'framer-motion';
 import {
-    AlertCircle,
-    CheckCircle,
     CheckCircle2,
     ShieldCheck,
     Target,
@@ -10,13 +8,8 @@ import {
     TrendingUp,
     Star,
     Quote,
-    Award,
-    Sparkles,
-    Lightbulb,
 } from 'lucide-react';
 
-// A single reveal recipe reused by every section on this page — one
-// consistent motion language instead of each block inventing its own.
 const revealUp = {
     hidden: { opacity: 0, y: 22 },
     show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } },
@@ -26,121 +19,96 @@ const revealContainer = {
     show: { transition: { staggerChildren: 0.08 } },
 };
 
+// A numbered exhibit marker + connecting spine replaces the repeated
+// icon-and-uppercase-label row every section used to open with. The
+// numbering is honest here — these sections really do read in order,
+// from background through to client sign-off.
+function Exhibit({ id, number, kicker, title, children }) {
+    return (
+        <motion.section
+            id={id}
+            className="scroll-mt-40 relative pl-0 lg:pl-16"
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: '-80px' }}
+            variants={revealContainer}
+        >
+            <motion.div
+                variants={revealUp}
+                className="hidden lg:flex absolute left-0 top-1 w-10 h-10 rounded-full border border-[var(--border)] bg-[var(--bg-card)] items-center justify-center text-xs font-mono font-bold text-[var(--text-faint)]"
+            >
+                {number}
+            </motion.div>
+
+            <motion.div variants={revealUp} className="flex items-center gap-2 text-xs font-semibold text-[var(--text-faint)] mb-2">
+                <span className="lg:hidden font-mono text-[var(--accent-cyan)]">{number}</span>
+                <span>{kicker}</span>
+            </motion.div>
+            <motion.h2 variants={revealUp} className="text-2xl sm:text-3xl font-black text-[var(--text-primary)] tracking-tight mb-5 leading-snug">
+                {title}
+            </motion.h2>
+
+            {children}
+        </motion.section>
+    );
+}
+
 export default function CaseStudyContent({ study }) {
     const pillarIcons = [Target, Layers, TrendingUp, ShieldCheck];
 
+    // Keep exhibit numbers sequential even though pillars / results /
+    // testimonial are optional and may not all be present for a given client.
+    let n = 0;
+    const num = () => String(++n).padStart(2, '0');
+    const overviewNo = num();
+    const challengeNo = num();
+    const pillarsNo = study.strategyPillars?.length > 0 ? num() : null;
+    const resultsNo = study.resultsHighlights?.length > 0 ? num() : null;
+    const testimonialNo = study.testimonial ? num() : null;
+
     return (
-        <div className="space-y-14">
+        <div className="relative space-y-16">
+            {/* Connecting spine running behind the exhibit markers */}
+            <div
+                className="hidden lg:block absolute left-5 top-4 bottom-4 w-px bg-gradient-to-b from-[var(--accent-cyan)]/40 via-[var(--border)] to-transparent"
+                aria-hidden="true"
+            />
+
             {/* 1. Executive Summary */}
-            <motion.section
-                id="overview"
-                className="scroll-mt-40 pt-2"
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true, margin: '-80px' }}
-                variants={revealUp}
-            >
-                <div className="flex items-center gap-2 text-xs font-extrabold uppercase tracking-wider text-[var(--accent-cyan)] mb-3">
-                    <Sparkles size={14} />
-                    <span>Project Overview & Background</span>
-                </div>
-                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[var(--text-primary)] tracking-tight mb-5 leading-snug">
-                    Scaling Growth & Digital Authority for {study.name}
-                </h2>
+            <Exhibit id="overview" number={overviewNo} kicker="Background" title={`Scaling growth & digital authority for ${study.name}`}>
                 <p className="text-base sm:text-lg text-[var(--text-muted)] leading-relaxed font-normal max-w-3xl">
                     {study.description}
                 </p>
-            </motion.section>
+            </Exhibit>
 
-            {/* 2. The Challenge vs The Solution */}
-            <motion.section
-                id="challenge-solution"
-                className="scroll-mt-40"
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true, margin: '-80px' }}
-                variants={revealContainer}
-            >
-                <motion.div variants={revealUp} className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[var(--text-faint)] mb-3">
-                    <Lightbulb size={14} className="text-amber-500 dark:text-amber-400" />
-                    <span>The Strategic Challenge & Intervention</span>
-                </motion.div>
-                <motion.h2 variants={revealUp} className="text-2xl sm:text-3xl font-black text-[var(--text-primary)] tracking-tight mb-6">
-                    Overcoming Bottlenecks with Tailored Execution
-                </motion.h2>
-
-                <div className="grid md:grid-cols-2 gap-6">
-                    <motion.div
-                        variants={revealUp}
-                        whileHover={{ y: -3 }}
-                        transition={{ type: 'spring', stiffness: 300, damping: 24 }}
-                        className="rounded-2xl p-6 sm:p-7 border border-amber-500/30 bg-amber-500/[0.04] relative overflow-hidden shadow-sm"
-                    >
-                        <div className="flex items-center gap-3 mb-4">
-                            <div className="w-9 h-9 rounded-xl bg-amber-400/15 border border-amber-400/35 flex items-center justify-center text-amber-500 dark:text-amber-400 shrink-0">
-                                <AlertCircle size={18} />
-                            </div>
-                            <div>
-                                <span className="text-[11px] font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">
-                                    The Obstacle
-                                </span>
-                                <h3 className="text-base sm:text-lg font-bold text-[var(--text-primary)]">
-                                    The Core Challenge
-                                </h3>
-                            </div>
-                        </div>
-
-                        <p className="text-sm text-[var(--text-muted)] leading-relaxed font-normal">
+            {/* 2. The Challenge vs The Solution — asymmetric on purpose: the
+                obstacle is stated plainly, the fix is where the visual weight sits. */}
+            <Exhibit id="challenge-solution" number={challengeNo} kicker="Challenge & approach" title="Overcoming the bottleneck">
+                <div className="grid md:grid-cols-12 gap-6 items-stretch">
+                    <motion.div variants={revealUp} className="md:col-span-5 md:pr-6 md:border-r md:border-[var(--border)]">
+                        <span className="text-[11px] font-bold text-amber-600 dark:text-amber-400">The obstacle</span>
+                        <p className="text-sm text-[var(--text-muted)] leading-relaxed font-normal mt-2">
                             {study.challenge}
                         </p>
                     </motion.div>
 
                     <motion.div
                         variants={revealUp}
-                        whileHover={{ y: -3 }}
-                        transition={{ type: 'spring', stiffness: 300, damping: 24 }}
-                        className="rounded-2xl p-6 sm:p-7 border border-[var(--accent-cyan)]/35 bg-[var(--accent-cyan)]/[0.05] relative overflow-hidden shadow-sm"
+                        className="md:col-span-7 rounded-2xl p-6 sm:p-7 border border-[var(--accent-cyan)]/30 bg-[var(--accent-cyan)]/[0.05] relative overflow-hidden"
                     >
-                        <div className="flex items-center gap-3 mb-4">
-                            <div className="w-9 h-9 rounded-xl bg-[var(--accent-cyan)]/15 border border-[var(--accent-cyan)]/35 flex items-center justify-center text-[var(--accent-cyan)] shrink-0">
-                                <CheckCircle size={18} />
-                            </div>
-                            <div>
-                                <span className="text-[11px] font-bold uppercase tracking-wider text-[var(--accent-cyan)]">
-                                    The WSI Blueprint
-                                </span>
-                                <h3 className="text-base sm:text-lg font-bold text-[var(--text-primary)]">
-                                    The Strategic Solution
-                                </h3>
-                            </div>
-                        </div>
-
-                        <p className="text-sm text-[var(--text-muted)] leading-relaxed font-normal">
+                        <span className="text-[11px] font-bold text-[var(--accent-cyan)]">The WSI approach</span>
+                        <p className="text-sm text-[var(--text-primary)] leading-relaxed font-medium mt-2">
                             {study.solution}
                         </p>
                     </motion.div>
                 </div>
-            </motion.section>
+            </Exhibit>
 
-            {/* 3. Strategic Execution Pillars */}
+            {/* 3. Strategic Execution Pillars — a genuine sequence, so numbering here earns its keep */}
             {study.strategyPillars?.length > 0 && (
-                <motion.section
-                    id="strategy-pillars"
-                    className="scroll-mt-40"
-                    initial="hidden"
-                    whileInView="show"
-                    viewport={{ once: true, margin: '-80px' }}
-                    variants={revealContainer}
-                >
-                    <motion.div variants={revealUp} className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[var(--accent-cyan)] mb-3">
-                        <Layers size={14} />
-                        <span>Execution Roadmap</span>
-                    </motion.div>
-                    <motion.h2 variants={revealUp} className="text-2xl sm:text-3xl font-black text-[var(--text-primary)] tracking-tight mb-2">
-                        How We Delivered Measurable Impact
-                    </motion.h2>
+                <Exhibit id="strategy-pillars" number={pillarsNo} kicker="Execution roadmap" title="How we delivered measurable impact">
                     <motion.p variants={revealUp} className="text-sm text-[var(--text-muted)] mb-8 max-w-2xl font-normal">
-                        Our battle-tested four-pillar framework designed to drive sustained search dominance and conversion efficiency.
+                        A four-pillar framework built to drive sustained search dominance and conversion efficiency.
                     </motion.p>
 
                     <div className="grid sm:grid-cols-2 gap-5">
@@ -150,16 +118,14 @@ export default function CaseStudyContent({ study }) {
                                 <motion.div
                                     key={index}
                                     variants={revealUp}
-                                    whileHover={{ y: -4 }}
-                                    transition={{ type: 'spring', stiffness: 300, damping: 22 }}
-                                    className="rounded-2xl p-6 bg-[var(--bg-card)] border border-[var(--border)] hover:border-[var(--accent-cyan)]/40 transition-colors duration-300 group shadow-sm hover:shadow-lg"
+                                    className="rounded-2xl p-6 bg-[var(--bg-card)] border border-[var(--border)] hover:border-[var(--accent-cyan)]/40 transition-colors duration-300 group"
                                 >
                                     <div className="flex items-center justify-between mb-4">
-                                        <div className="w-10 h-10 rounded-xl bg-[var(--bg-surface-soft)] border border-[var(--border)] flex items-center justify-center text-[var(--accent-cyan)] group-hover:bg-[var(--accent-cyan)]/15 group-hover:border-[var(--accent-cyan)]/35 group-hover:scale-110 transition-all duration-300">
+                                        <div className="w-10 h-10 rounded-xl bg-[var(--bg-surface-soft)] border border-[var(--border)] flex items-center justify-center text-[var(--accent-cyan)] group-hover:border-[var(--accent-cyan)]/40 transition-colors">
                                             <Icon size={18} />
                                         </div>
                                         <span className="text-xs font-mono font-bold text-[var(--text-faint)] group-hover:text-[var(--accent-cyan)] transition-colors">
-                                            0{index + 1}
+                                            {String(index + 1).padStart(2, '0')}
                                         </span>
                                     </div>
 
@@ -174,71 +140,39 @@ export default function CaseStudyContent({ study }) {
                             );
                         })}
                     </div>
-                </motion.section>
+                </Exhibit>
             )}
 
             {/* 4. Key Measurable Outcomes */}
             {study.resultsHighlights?.length > 0 && (
-                <motion.section
-                    id="results"
-                    className="scroll-mt-40"
-                    initial="hidden"
-                    whileInView="show"
-                    viewport={{ once: true, margin: '-80px' }}
-                    variants={revealUp}
-                >
-                    <div className="rounded-2xl bg-[var(--bg-card)] p-6 sm:p-8 border border-[var(--border)] relative overflow-hidden shadow-md">
-                        <div className="absolute -top-10 -right-10 w-40 h-40 bg-emerald-500/10 blur-[80px] rounded-full pointer-events-none" />
-
-                        <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 mb-2">
-                            <Award size={14} />
-                            <span>Measurable Business Results</span>
-                        </div>
-                        <h2 className="text-xl sm:text-2xl font-black text-[var(--text-primary)] tracking-tight mb-6">
-                            Key Outcomes & Performance Milestones
-                        </h2>
-
-                        <motion.div
-                            variants={revealContainer}
-                            initial="hidden"
-                            whileInView="show"
-                            viewport={{ once: true }}
-                            className="grid sm:grid-cols-2 gap-4"
-                        >
-                            {study.resultsHighlights.map((highlight, idx) => (
-                                <motion.div
-                                    key={idx}
-                                    variants={revealUp}
-                                    className="flex items-start gap-3 p-4 rounded-xl bg-[var(--bg-surface-soft)] border border-[var(--border)] hover:border-emerald-500/30 transition-colors shadow-sm"
-                                >
-                                    <div className="w-6 h-6 rounded-full bg-emerald-500/15 border border-emerald-500/35 flex items-center justify-center text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5">
-                                        <CheckCircle2 size={13} />
-                                    </div>
-                                    <span className="text-xs sm:text-sm font-semibold text-[var(--text-primary)] leading-snug">
-                                        {highlight}
-                                    </span>
-                                </motion.div>
-                            ))}
-                        </motion.div>
-                    </div>
-                </motion.section>
+                <Exhibit id="results" number={resultsNo} kicker="Measurable results" title="Key outcomes & performance milestones">
+                    <motion.div
+                        variants={revealContainer}
+                        className="grid sm:grid-cols-2 gap-4"
+                    >
+                        {study.resultsHighlights.map((highlight, idx) => (
+                            <motion.div
+                                key={idx}
+                                variants={revealUp}
+                                className="flex items-start gap-3 p-4 rounded-xl bg-[var(--bg-surface-soft)] border border-[var(--border)] hover:border-emerald-500/30 transition-colors"
+                            >
+                                <div className="w-6 h-6 rounded-full bg-emerald-500/15 border border-emerald-500/35 flex items-center justify-center text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5">
+                                    <CheckCircle2 size={13} />
+                                </div>
+                                <span className="text-xs sm:text-sm font-semibold text-[var(--text-primary)] leading-snug">
+                                    {highlight}
+                                </span>
+                            </motion.div>
+                        ))}
+                    </motion.div>
+                </Exhibit>
             )}
 
             {/* 5. Client Testimonial & Endorsement */}
             {study.testimonial && (
-                <motion.section
-                    id="testimonial"
-                    className="scroll-mt-40"
-                    initial="hidden"
-                    whileInView="show"
-                    viewport={{ once: true, margin: '-80px' }}
-                    variants={revealUp}
-                >
-                    <div className="rounded-2xl p-7 sm:p-9 border border-[var(--border)] bg-gradient-to-br from-[var(--bg-card)] via-[var(--bg-secondary)] to-[var(--bg-card)] relative overflow-hidden shadow-xl transition-colors duration-300">
-                        <Quote
-                            size={72}
-                            className="absolute -right-4 -bottom-4 text-[var(--text-primary)]/[0.04] pointer-events-none"
-                        />
+                <Exhibit id="testimonial" number={testimonialNo} kicker="Client sign-off" title="What the client says">
+                    <div className="rounded-2xl p-7 sm:p-9 border border-[var(--border)] bg-[var(--bg-card)] relative overflow-hidden">
+                        <Quote size={72} className="absolute -right-4 -bottom-4 text-[var(--text-primary)]/[0.04] pointer-events-none" />
 
                         <div className="flex items-center gap-1 text-amber-500 dark:text-amber-400 mb-5">
                             {[...Array(study.testimonial.rating || 5)].map((_, i) => (
@@ -251,7 +185,7 @@ export default function CaseStudyContent({ study }) {
                         </blockquote>
 
                         <div className="flex items-center gap-3.5 pt-5 border-t border-[var(--border)]">
-                            <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[var(--accent-cyan)] to-[var(--accent-purple)] flex items-center justify-center text-white font-bold text-sm shadow-md shrink-0">
+                            <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[var(--accent-cyan)] to-[var(--accent-purple)] flex items-center justify-center text-white font-bold text-sm shrink-0">
                                 {study.name.charAt(0)}
                             </div>
                             <div>
@@ -264,7 +198,7 @@ export default function CaseStudyContent({ study }) {
                             </div>
                         </div>
                     </div>
-                </motion.section>
+                </Exhibit>
             )}
         </div>
     );
