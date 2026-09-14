@@ -110,16 +110,25 @@ export default function CaseStudyHero({ study }) {
 
     return (
         <section className="relative w-full overflow-hidden pt-6 sm:pt-8 pb-6 border-b border-[var(--border)] transition-colors duration-300 bg-[var(--bg-page)] text-[var(--text-primary)]">
-            {/* Soft vertical wash — richer in light mode so the section doesn't feel flat */}
-            <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-[var(--bg-secondary)]/[0.85] dark:from-[var(--bg-secondary)]/20 via-transparent to-transparent" />
+            {/* Base wash: soft color at the top fading to the page color, gives the section
+                a gentle backdrop instead of flat white/black */}
+            <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-[var(--bg-secondary)]/[0.7] dark:from-[var(--bg-secondary)]/25 via-[var(--bg-page)]/40 dark:via-transparent to-[var(--bg-page)]" />
 
-            {/* Subtle vignette for depth in light mode */}
-            <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_50%_30%,transparent_40%,var(--bg-page)/[0.5])] dark:bg-[radial-gradient(ellipse_at_50%_30%,transparent_40%,transparent)]" />
+            {/* Diagonal accent sweep: a wide, very soft band of color cutting across the
+                section for a more designed, less static feel */}
+            <div
+                className="absolute inset-0 pointer-events-none opacity-[0.5] dark:opacity-[0.35]"
+                style={{
+                    background: 'linear-gradient(115deg, transparent 30%, var(--accent-cyan) 48%, var(--accent-purple) 58%, transparent 75%)',
+                    opacity: 0.06,
+                }}
+            />
 
+            {/* Top / bottom hairlines */}
             <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--accent-cyan)]/[0.55] dark:via-[var(--accent-cyan)]/30 to-transparent pointer-events-none" />
             <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--accent-purple)]/[0.4] dark:via-[var(--accent-purple)]/20 to-transparent pointer-events-none" />
 
-            {/* Dot-grid mesh: gives light mode some texture to sit on instead of flat white,
+            {/* Dot-grid mesh: gives light mode texture to sit on instead of flat white,
                 still subtle enough not to fight with content */}
             <div
                 className="absolute inset-0 pointer-events-none opacity-[0.55] dark:opacity-[0.25]"
@@ -131,7 +140,7 @@ export default function CaseStudyHero({ study }) {
                 }}
             />
 
-            {/* Fine line grid — visible in both modes for consistent depth */}
+            {/* Fine line grid, layered for extra depth in both modes */}
             <div
                 className="absolute inset-0 pointer-events-none opacity-[0.07] dark:opacity-[0.14]"
                 style={{
@@ -142,7 +151,17 @@ export default function CaseStudyHero({ study }) {
                 }}
             />
 
-            {/* Ambient glow blobs: more colorful and present in light mode so the section
+            {/* Fine grain / noise texture: breaks up flat gradient banding and adds a
+                premium, printed-paper quality in light mode especially */}
+            <div
+                className="absolute inset-0 pointer-events-none opacity-[0.4] dark:opacity-[0.25] mix-blend-overlay"
+                style={{
+                    backgroundImage:
+                        "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E\")",
+                }}
+            />
+
+            {/* Ambient glow blobs: colorful and present in light mode so the section
                 doesn't read as empty white space, richer and more saturated in dark mode */}
             <div className="absolute inset-0 pointer-events-none overflow-hidden">
                 <div className="absolute -top-28 left-[8%] w-[600px] h-[420px] bg-[var(--accent-cyan)]/[0.22] dark:bg-[var(--accent-cyan)]/20 blur-[110px] rounded-full" />
@@ -158,6 +177,7 @@ export default function CaseStudyHero({ study }) {
                 <div className="absolute top-24 right-[18%] w-2.5 h-2.5 rounded-full bg-[var(--accent-purple)]/[0.55] dark:bg-[var(--accent-purple)]/50" />
                 <div className="absolute bottom-16 left-[10%] w-10 h-10 rounded-full border border-[var(--accent-blue)]/[0.4] dark:border-[var(--accent-blue)]/20" />
                 <div className="absolute bottom-28 left-[16%] w-2 h-2 rounded-full bg-[var(--accent-cyan)]/[0.55] dark:bg-[var(--accent-cyan)]/50" />
+                <div className="absolute top-1/2 right-[4%] w-6 h-6 rounded-full border border-dashed border-[var(--accent-purple)]/[0.35] dark:border-[var(--accent-purple)]/20" />
             </div>
 
             <motion.div
@@ -357,7 +377,6 @@ export default function CaseStudyHero({ study }) {
                         </div>
                     </motion.div>
                 )}
-                
             </motion.div>
         </section>
     );
